@@ -18,6 +18,21 @@ namespace FaceAggregator.Controllers
         {
             return new RedirectResult(returnUrl);
         }
+        
+        public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut();
+            Session.Abandon();
+            return RedirectToAction("Index", "Home");
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
+        }
 
         // Implementation copied from a standard MVC Project, with some stuff
         // that relates to linking a new external login to an existing identity

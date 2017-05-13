@@ -2,8 +2,21 @@
     ViewBag.Title = "Welcome";
 }
 
-<div class="jumbotron">
-    <h1>FaceAggregator</h1>
-    <p class="lead">What an amazing application. etc.</p>
-    <p><a href=@Url.Action("Menu", "Home") class="btn btn-primary btn-lg">Log In &raquo;</a></p>
-</div>
+@if (!Request.IsAuthenticated)
+{
+    <div class="jumbotron">
+        <h1>FaceAggregator</h1>
+        <p class="lead">What an amazing application. etc.</p>
+        <p><a href=@Url.Action("LoggedInIndex", "Home") class="btn btn-primary btn-lg">Log In &raquo;</a>
+        </p>
+    </div>
+}
+else
+{
+    <div class="jumbotron">
+        <h1>FaceAggregator</h1>
+        <p class="lead">What you have to do to make everything work</p>
+
+    </div>
+}
+

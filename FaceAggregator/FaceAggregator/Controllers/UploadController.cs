@@ -60,7 +60,7 @@ namespace FaceAggregator.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadAsync()
+        private async Task<ActionResult> UploadAsync()
         {
             try
             {

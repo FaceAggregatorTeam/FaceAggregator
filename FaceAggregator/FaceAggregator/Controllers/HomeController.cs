@@ -13,14 +13,10 @@ namespace FaceAggregator.Controllers
             return View();
         }
         [Authorize]
-        public ActionResult Menu()
+        public ActionResult LoggedInIndex()
         {
-            return View();
+            return View("Index");
         }
-        [Authorize]
-        public ActionResult Results()
-        {
-            return View();
-        }
+
     }
 }

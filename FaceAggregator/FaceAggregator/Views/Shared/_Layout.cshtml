@@ -16,15 +16,16 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("FaceAggregator", "Menu", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("FaceAggregator", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Upload photos", "UploadPhotos", "Upload")</li>
-                        <li>@Html.ActionLink("Select person", "UploadPerson", "Upload")</li>
-                        <li>@Html.ActionLink("Results", "Results", "Home")</li>
+                        <li>@Html.ActionLink("Select person", "UploadPhotos", "Upload")</li>
+                        <li>@Html.ActionLink("Results", "UploadPhotos", "Upload")</li>
+                        <li>@Html.ActionLink("Log out", "LogOff", "Account")</li>
                     }
                 </ul>
             </div>
