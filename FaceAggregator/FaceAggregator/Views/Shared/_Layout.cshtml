@@ -22,8 +22,8 @@
                 <ul class="nav navbar-nav">
                     @if (Request.IsAuthenticated)
                     {
-                        <li>@Html.ActionLink("Upload photos", "Upload", "Home")</li>
-                        <li>@Html.ActionLink("Select person", "Person", "Home")</li>
+                        <li>@Html.ActionLink("Upload photos", "UploadPhotos", "Upload")</li>
+                        <li>@Html.ActionLink("Select person", "UploadPerson", "Upload")</li>
                         <li>@Html.ActionLink("Results", "Results", "Home")</li>
                     }
                 </ul>

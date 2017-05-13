@@ -10,26 +10,16 @@ namespace FaceAggregator.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Welcome page, used to log in";
             return View();
         }
         [Authorize]
         public ActionResult Menu()
         {
-            ViewBag.Message = "Here is app main menu";
-            return View();
-        }
-        [Authorize]
-        public ActionResult Upload()
-        {
-            ViewBag.Message = "Here we upload out photos.";
             return View();
         }
         [Authorize]
         public ActionResult Person()
         {
-            ViewBag.Message = "Here we upload template person photo.";
-
             return View();
         }
         [Authorize]
