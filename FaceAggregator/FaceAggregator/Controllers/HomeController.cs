@@ -18,15 +18,8 @@ namespace FaceAggregator.Controllers
             return View();
         }
         [Authorize]
-        public ActionResult Person()
-        {
-            return View();
-        }
-        [Authorize]
         public ActionResult Results()
         {
-            ViewBag.Message = "Here we see results.";
-
             return View();
         }
     }

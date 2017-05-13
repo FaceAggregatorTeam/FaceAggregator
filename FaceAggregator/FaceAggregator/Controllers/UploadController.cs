@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
+using FaceAggregator.Services;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
@@ -14,6 +15,12 @@ namespace FaceAggregator.Controllers
     [Authorize]
     public class UploadController : Controller
     {
+        private IUploadService _uploadService;
+        public UploadController(IUploadService uploadService)
+        {
+            _uploadService = uploadService;
+        }
+
         static CloudBlobClient blobClient;
         const string blobContainerName = "webappstoragedotnet-imagecontainer";
         static CloudBlobContainer blobContainer;
