@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{52FE4D5C-2DD9-469D-8B15-FF29C0B093DD}</ProjectGuid>
+    <ProjectGuid>{A67FF4A4-860C-4D48-98F4-774E60996856}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FaceAggregator.Tests</RootNamespace>
@@ -93,7 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FaceAggregator\FaceAggregator.csproj">
-      <Project>{4C365425-8659-40BD-B6C8-ED0110DC02C1}</Project>
+      <Project>{78236A36-D0DD-479E-80D4-337D692C70C2}</Project>
       <Name>FaceAggregator</Name>
     </ProjectReference>
   </ItemGroup>
