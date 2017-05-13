@@ -10,19 +10,32 @@ namespace FaceAggregator.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.Message = "Welcome page, used to log in";
             return View();
         }
-
-        public ActionResult About()
+        [Authorize]
+        public ActionResult Menu()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Here is app main menu";
+            return View();
+        }
+        [Authorize]
+        public ActionResult Upload()
+        {
+            ViewBag.Message = "Here we upload out photos.";
+            return View();
+        }
+        [Authorize]
+        public ActionResult Person()
+        {
+            ViewBag.Message = "Here we upload template person photo.";
 
             return View();
         }
         [Authorize]
-        public ActionResult Contact()
+        public ActionResult Results()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Here we see results.";
 
             return View();
         }
