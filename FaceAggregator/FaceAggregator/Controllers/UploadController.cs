@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -15,35 +16,21 @@ namespace FaceAggregator.Controllers
     [Authorize]
     public class UploadController : Controller
     {
-        private IUploadService _uploadService;
+        private readonly IUploadService _uploadService;
+        private string _emailAddress;
         public UploadController(IUploadService uploadService)
         {
             _uploadService = uploadService;
+            var claim = ClaimsPrincipal.Current.Claims.FirstOrDefault(e => e.Type.Contains("emailaddress"));
+            if (claim != null)
+                _emailAddress = claim.Value;
         }
-
-        static CloudBlobClient blobClient;
-        const string blobContainerName = "webappstoragedotnet-imagecontainer";
-        static CloudBlobContainer blobContainer;
 
         public async Task<ActionResult> UploadPhotos()
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(WebConfigurationManager.AppSettings["StorageConnectionString"]);
-
-                blobClient = storageAccount.CreateCloudBlobClient();
-                blobContainer = blobClient.GetContainerReference(blobContainerName);
-                await blobContainer.CreateIfNotExistsAsync();
-                
-                await blobContainer.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
-                
-                List<Uri> allBlobs = new List<Uri>();
-                foreach (IListBlobItem blob in blobContainer.ListBlobs())
-                {
-                    if (blob.GetType() == typeof(CloudBlockBlob))
-                        allBlobs.Add(blob.Uri);
-                }
-
+                ICollection<Uri> allBlobs = await _uploadService.GetAllBlobs(_emailAddress);
                 return View(allBlobs);
             }
             catch (Exception ex)
@@ -56,7 +43,7 @@ namespace FaceAggregator.Controllers
 
         public ActionResult UploadPerson()
         {
-            return null;
+            return View();
         }
 
         [HttpPost]
@@ -65,17 +52,8 @@ namespace FaceAggregator.Controllers
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                int fileCount = files.Count;
-
-                if (fileCount > 0)
-                {
-                    for (int i = 0; i < fileCount; i++)
-                    {
-                        CloudBlockBlob blob = blobContainer.GetBlockBlobReference(GetRandomBlobName(files[i].FileName));
-                        blob.Properties.ContentType = files[i].ContentType;
-                        await blob.UploadFromStreamAsync(files[i].InputStream);
-                    }
-                }
+                await _uploadService.UploadAsync(files, _emailAddress);
+                
                 return RedirectToAction("UploadPhotos");
             }
             catch (Exception ex)
@@ -93,10 +71,7 @@ namespace FaceAggregator.Controllers
             {
                 Uri uri = new Uri(name);
                 string filename = Path.GetFileName(uri.LocalPath);
-
-                var blob = blobContainer.GetBlockBlobReference(filename);
-                await blob.DeleteIfExistsAsync();
-
+                await _uploadService.DeleteImage(filename, _emailAddress);
                 return RedirectToAction("UploadPhotos");
             }
             catch (Exception ex)
@@ -112,13 +87,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                foreach (var blob in blobContainer.ListBlobs())
-                {
-                    if (blob.GetType() == typeof(CloudBlockBlob))
-                    {
-                        await ((CloudBlockBlob)blob).DeleteIfExistsAsync();
-                    }
-                }
+                await _uploadService.DeleteAllImages(_emailAddress);
 
                 return RedirectToAction("UploadPhotos");
             }
@@ -129,11 +98,6 @@ namespace FaceAggregator.Controllers
                 return View("Error");
             }
         }
-         
-        private string GetRandomBlobName(string filename)
-        {
-            string ext = Path.GetExtension(filename);
-            return string.Format("{0:10}_{1}{2}", DateTime.Now.Ticks, Guid.NewGuid(), ext);
-        }
+        
     }
 }

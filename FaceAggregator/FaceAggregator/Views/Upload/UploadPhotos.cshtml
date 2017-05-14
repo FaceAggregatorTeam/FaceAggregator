@@ -33,7 +33,7 @@
     function deleteImage(item) {
         var url = "/Upload/DeleteImage";
         $.post(url, { Name: item }, function (data) {
-            window.location.href = "/Upload/Index";
+            window.location.href = "/Upload/UploadPhotos";
         });
     }
     function DisplayFilesToUpload() {
