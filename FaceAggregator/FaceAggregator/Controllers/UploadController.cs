@@ -17,7 +17,7 @@ namespace FaceAggregator.Controllers
     public class UploadController : Controller
     {
         private readonly IUploadService _uploadService;
-        private string _emailAddress;
+        private readonly string _emailAddress;
         public UploadController(IUploadService uploadService)
         {
             _uploadService = uploadService;
@@ -30,8 +30,8 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                ICollection<Uri> allBlobs = await _uploadService.GetAllBlobs(_emailAddress);
-                return View(allBlobs);
+                ICollection<Uri> allPhotos = await _uploadService.GetAllPhotos(GetContainerNamePhotos(_emailAddress));
+                return View(allPhotos);
             }
             catch (Exception ex)
             {
@@ -41,18 +41,47 @@ namespace FaceAggregator.Controllers
             }
         }
 
-        public ActionResult UploadPerson()
+        public async Task<ActionResult> UploadFace()
         {
-            return View();
+            try
+            {
+                ICollection<Uri> facePhotos = await _uploadService.GetAllPhotos(GetContainerNameFace(_emailAddress));
+                return View(facePhotos.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                ViewData["message"] = ex.Message;
+                ViewData["trace"] = ex.StackTrace;
+                return View("Error");
+            }
         }
 
         [HttpPost]
-        public async Task<ActionResult> UploadAsync()
+        public async Task<ActionResult> UploadAsyncFace()
         {
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                await _uploadService.UploadAsync(files, _emailAddress);
+                await _uploadService.DeleteAllImages(GetContainerNameFace(_emailAddress));
+                await _uploadService.UploadAsync(files, GetContainerNameFace(_emailAddress));
+
+                return RedirectToAction("UploadFace");
+            }
+            catch (Exception ex)
+            {
+                ViewData["message"] = ex.Message;
+                ViewData["trace"] = ex.StackTrace;
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UploadAsyncPhotos()
+        {
+            try
+            {
+                HttpFileCollectionBase files = Request.Files;
+                await _uploadService.UploadAsync(files, GetContainerNamePhotos(_emailAddress));
                 
                 return RedirectToAction("UploadPhotos");
             }
@@ -71,7 +100,7 @@ namespace FaceAggregator.Controllers
             {
                 Uri uri = new Uri(name);
                 string filename = Path.GetFileName(uri.LocalPath);
-                await _uploadService.DeleteImage(filename, _emailAddress);
+                await _uploadService.DeleteImage(filename, GetContainerNamePhotos(_emailAddress));
                 return RedirectToAction("UploadPhotos");
             }
             catch (Exception ex)
@@ -87,7 +116,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                await _uploadService.DeleteAllImages(_emailAddress);
+                await _uploadService.DeleteAllImages(GetContainerNamePhotos(_emailAddress));
 
                 return RedirectToAction("UploadPhotos");
             }
@@ -98,6 +127,18 @@ namespace FaceAggregator.Controllers
                 return View("Error");
             }
         }
-        
+
+        private string GetContainerNamePhotos(string emailAddress)
+        {
+            string result = emailAddress.Replace('.', '-').Replace('@', '-') + "-photos";
+            return result.ToLower();
+        }
+
+        private string GetContainerNameFace(string emailAddress)
+        {
+            string result = emailAddress.Replace('.', '-').Replace('@', '-') + "-face";
+            return result.ToLower();
+        }
+
     }
 }

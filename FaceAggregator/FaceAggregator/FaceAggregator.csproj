@@ -184,6 +184,7 @@
     <Compile Include="App_Start\Startup.Auth.GoogleSettings.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ResultsController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -250,7 +251,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Upload\UploadPhotos.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Upload\UploadPerson.cshtml" />
+    <Content Include="Views\Upload\UploadFace.cshtml" />
+    <Content Include="Views\Results\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

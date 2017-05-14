@@ -23,8 +23,8 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Upload photos", "UploadPhotos", "Upload")</li>
-                        <li>@Html.ActionLink("Select person", "UploadPhotos", "Upload")</li>
-                        <li>@Html.ActionLink("Results", "UploadPhotos", "Upload")</li>
+                        <li>@Html.ActionLink("Select person", "UploadFace", "Upload")</li>
+                        <li>@Html.ActionLink("Results", "Index", "Home")</li>
                         <li>@Html.ActionLink("Log out", "LogOff", "Account")</li>
                     }
                 </ul>

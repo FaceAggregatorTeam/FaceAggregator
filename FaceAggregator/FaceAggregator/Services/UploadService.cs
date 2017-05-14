@@ -22,10 +22,10 @@ namespace FaceAggregator.Services
             _blobClient = _storageAccount.CreateCloudBlobClient();
         }
         
-        public async Task<ICollection<Uri>> GetAllBlobs(string emailAddress)
+        public async Task<ICollection<Uri>> GetAllPhotos(string containerName)
         {
             
-            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(GetContainerName(emailAddress));
+            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
             await blobContainer.CreateIfNotExistsAsync();
 
             await blobContainer.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
@@ -40,10 +40,10 @@ namespace FaceAggregator.Services
             return allBlobs;
         }
 
-        public async Task UploadAsync(HttpFileCollectionBase files, string emailAddress)
+        public async Task UploadAsync(HttpFileCollectionBase files, string containerName)
         {
             int fileCount = files.Count;
-            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(GetContainerName(emailAddress));
+            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
             if (fileCount > 0)
             {
                 for (int i = 0; i < fileCount; i++)
@@ -61,22 +61,18 @@ namespace FaceAggregator.Services
             return string.Format("{0:10}_{1}{2}", DateTime.Now.Ticks, Guid.NewGuid(), ext);
         }
 
-        private string GetContainerName(string emailAddress)
-        {
-            string result = emailAddress.Replace('.', '-').Replace('@', '-');
-            return result.ToLower();
-        }
+        
 
-        public async Task DeleteImage(string filename, string emailAddress)
+        public async Task DeleteImage(string filename, string containerName)
         {
-            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(GetContainerName(emailAddress));
+            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
             var blob = blobContainer.GetBlockBlobReference(filename);
             await blob.DeleteIfExistsAsync();
         }
 
-        public async Task DeleteAllImages(string emailAddress)
+        public async Task DeleteAllImages(string containerName)
         {
-            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(GetContainerName(emailAddress));
+            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
             foreach (var blob in blobContainer.ListBlobs())
             {
                 if (blob.GetType() == typeof(CloudBlockBlob))
@@ -85,5 +81,6 @@ namespace FaceAggregator.Services
                 }
             }
         }
+        
     }
 }

@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Upload face photo";
+}
+<div class="jumbotron">
+    <h2>Person face photo upload</h2>
+    <h5>Here you can upload face photo for search. Only one photo, upload another and the old one will be replaced.</h5>
+</div>
+
+@using (Html.BeginForm("UploadAsyncFace", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="fileUpload btn btn-default">
+        <span>Select File</span><input type="file" id="file" name="selectFiles" class="upload" onchange="DisplayFilesToUpload()" />
+    </div>
+    <p id="FileToUpload"></p>
+}
+
+@if (Model != null)
+{
+
+    <div class="imageBlock">
+        <a href="@Model" target="_blank"><img class="thumb" src="@Model" alt="images" /></a><br />
+    </div>
+    
+}
+<script>
+    function DisplayFilesToUpload() {
+        var element = document.getElementById("file");
+        var html = "";
+
+        html = "<h3>Image to Upload</h3>"
+        for (var i = 0; i < element.files.length; i++) {
+            html += "<strong>" + (i + 1) + "</strong>. File: ";
+            var file = element.files[i];
+            if ('name' in file) { html += file.name + " ("; }
+            if ('size' in file) { html += "size: " + file.size + " bytes)<br>"; }
+        }
+
+        html += "<div class='fileUpload btn btn-default'><span>Upload</span><input type='submit' class='upload' value='Upload'/></div>"
+        document.getElementById("FileToUpload").innerHTML = html;
+    }
+
+</script>
