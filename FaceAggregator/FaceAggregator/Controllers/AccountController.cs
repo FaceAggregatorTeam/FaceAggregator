@@ -9,7 +9,6 @@ namespace FaceAggregator.Controllers
     {
         public ActionResult Login(string returnUrl)
         {
-            // Request a redirect to the external login provider
             return new ChallengeResult("Google",
                 Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
@@ -34,9 +33,6 @@ namespace FaceAggregator.Controllers
             }
         }
 
-        // Implementation copied from a standard MVC Project, with some stuff
-        // that relates to linking a new external login to an existing identity
-        // account removed.
         private class ChallengeResult : HttpUnauthorizedResult
         {
             public ChallengeResult(string provider, string redirectUri)
