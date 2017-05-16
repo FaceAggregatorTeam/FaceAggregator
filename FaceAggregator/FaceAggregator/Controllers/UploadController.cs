@@ -17,20 +17,18 @@ namespace FaceAggregator.Controllers
     public class UploadController : Controller
     {
         private readonly IImagesService _imagesService;
-        private readonly string _emailAddress;
-        public UploadController(IImagesService imagesService)
+        private readonly IAccountService _accountService;
+        public UploadController(IImagesService imagesService, IAccountService accountService)
         {
             _imagesService = imagesService;
-            var claim = ClaimsPrincipal.Current.Claims.FirstOrDefault(e => e.Type.Contains("emailaddress"));
-            if (claim != null)
-                _emailAddress = claim.Value;
+            _accountService = accountService;
         }
 
         public async Task<ActionResult> UploadPhotos()
         {
             try
             {
-                ICollection<Uri> allPhotos = await _imagesService.GetAllPhotos(GetContainerNamePhotos(_emailAddress));
+                ICollection<Uri> allPhotos = await _imagesService.GetAllPhotos(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
                 return View(allPhotos);
             }
             catch (Exception ex)
@@ -45,7 +43,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                ICollection<Uri> facePhotos = await _imagesService.GetAllPhotos(GetContainerNameFace(_emailAddress));
+                ICollection<Uri> facePhotos = await _imagesService.GetAllPhotos(_accountService.GetContainerNameFace(ClaimsPrincipal.Current));
                 return View(facePhotos.FirstOrDefault());
             }
             catch (Exception ex)
@@ -62,8 +60,9 @@ namespace FaceAggregator.Controllers
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                await _imagesService.DeleteAllImages(GetContainerNameFace(_emailAddress));
-                await _imagesService.UploadAsync(files, GetContainerNameFace(_emailAddress));
+                string containerName = _accountService.GetContainerNameFace(ClaimsPrincipal.Current);
+                await _imagesService.DeleteAllImages(containerName);
+                await _imagesService.UploadAsync(files, containerName);
 
                 return RedirectToAction("UploadFace");
             }
@@ -81,7 +80,7 @@ namespace FaceAggregator.Controllers
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                await _imagesService.UploadAsync(files, GetContainerNamePhotos(_emailAddress));
+                await _imagesService.UploadAsync(files, _accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
                 
                 return RedirectToAction("UploadPhotos");
             }
@@ -100,7 +99,7 @@ namespace FaceAggregator.Controllers
             {
                 Uri uri = new Uri(name);
                 string filename = Path.GetFileName(uri.LocalPath);
-                await _imagesService.DeleteImage(filename, GetContainerNamePhotos(_emailAddress));
+                await _imagesService.DeleteImage(filename, _accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
                 return RedirectToAction("UploadPhotos");
             }
             catch (Exception ex)
@@ -116,7 +115,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                await _imagesService.DeleteAllImages(GetContainerNamePhotos(_emailAddress));
+                await _imagesService.DeleteAllImages(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
 
                 return RedirectToAction("UploadPhotos");
             }
@@ -126,18 +125,6 @@ namespace FaceAggregator.Controllers
                 ViewData["trace"] = ex.StackTrace;
                 return View("Error");
             }
-        }
-
-        private string GetContainerNamePhotos(string emailAddress)
-        {
-            string result = emailAddress.Replace('.', '-').Replace('@', '-') + "-photos";
-            return result.ToLower();
-        }
-
-        private string GetContainerNameFace(string emailAddress)
-        {
-            string result = emailAddress.Replace('.', '-').Replace('@', '-') + "-face";
-            return result.ToLower();
         }
 
     }

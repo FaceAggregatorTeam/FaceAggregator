@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.EnterpriseServices;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
@@ -82,6 +83,22 @@ namespace FaceAggregator.Services
                 }
             }
         }
-        
+        public async Task UploadAsyncFromUri(IList<Image> foundImages, string containerName)
+        {
+            int fileCount = foundImages.Count;
+            CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
+            blobContainer.CreateIfNotExists();
+            if (fileCount > 0)
+            {
+                for (int i = 0; i < fileCount; i++)
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create(foundImages[i].Path);
+                    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                    Stream inputStream = response.GetResponseStream();
+                    CloudBlockBlob blob = blobContainer.GetBlockBlobReference(GetRandomBlobName(foundImages[i].Path));
+                    await blob.UploadFromStreamAsync(inputStream);
+                }
+            }
+        }
     }
 }

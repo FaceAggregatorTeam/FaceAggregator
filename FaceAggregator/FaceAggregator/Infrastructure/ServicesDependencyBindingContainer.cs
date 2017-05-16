@@ -25,6 +25,7 @@ namespace FaceAggregator.Infrastructure
             _kernel.Bind<IFaceRecognition>().To<HttpFaceRecognition>();
             _kernel.Bind<IFaceSimilarity>().To<FaceSimilarity>();
             _kernel.Bind<IRecognitionService>().To<RecognitionService>();
+            _kernel.Bind<IAccountService>().To<AccountService>();
         }
     }
 }

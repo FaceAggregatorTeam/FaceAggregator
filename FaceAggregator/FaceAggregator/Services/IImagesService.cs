@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using FaceAggregator.Utils;
 
 namespace FaceAggregator.Services
 {
@@ -12,6 +13,6 @@ namespace FaceAggregator.Services
         Task UploadAsync(HttpFileCollectionBase files, string containerName);
         Task DeleteImage(string filename, string containerName);
         Task DeleteAllImages(string containerName);
-
+        Task UploadAsyncFromUri(IList<Image> foundImages, string containerName);
     }
 }
