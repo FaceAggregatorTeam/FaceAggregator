@@ -6,7 +6,7 @@ using System.Web;
 
 namespace FaceAggregator.Services
 {
-    public interface IUploadService
+    public interface IImagesService
     {
         Task<ICollection<Uri>> GetAllPhotos(string containerName);
         Task UploadAsync(HttpFileCollectionBase files, string containerName);

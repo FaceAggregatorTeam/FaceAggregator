@@ -16,11 +16,11 @@ namespace FaceAggregator.Controllers
     [Authorize]
     public class UploadController : Controller
     {
-        private readonly IUploadService _uploadService;
+        private readonly IImagesService _imagesService;
         private readonly string _emailAddress;
-        public UploadController(IUploadService uploadService)
+        public UploadController(IImagesService imagesService)
         {
-            _uploadService = uploadService;
+            _imagesService = imagesService;
             var claim = ClaimsPrincipal.Current.Claims.FirstOrDefault(e => e.Type.Contains("emailaddress"));
             if (claim != null)
                 _emailAddress = claim.Value;
@@ -30,7 +30,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                ICollection<Uri> allPhotos = await _uploadService.GetAllPhotos(GetContainerNamePhotos(_emailAddress));
+                ICollection<Uri> allPhotos = await _imagesService.GetAllPhotos(GetContainerNamePhotos(_emailAddress));
                 return View(allPhotos);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                ICollection<Uri> facePhotos = await _uploadService.GetAllPhotos(GetContainerNameFace(_emailAddress));
+                ICollection<Uri> facePhotos = await _imagesService.GetAllPhotos(GetContainerNameFace(_emailAddress));
                 return View(facePhotos.FirstOrDefault());
             }
             catch (Exception ex)
@@ -62,8 +62,8 @@ namespace FaceAggregator.Controllers
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                await _uploadService.DeleteAllImages(GetContainerNameFace(_emailAddress));
-                await _uploadService.UploadAsync(files, GetContainerNameFace(_emailAddress));
+                await _imagesService.DeleteAllImages(GetContainerNameFace(_emailAddress));
+                await _imagesService.UploadAsync(files, GetContainerNameFace(_emailAddress));
 
                 return RedirectToAction("UploadFace");
             }
@@ -81,7 +81,7 @@ namespace FaceAggregator.Controllers
             try
             {
                 HttpFileCollectionBase files = Request.Files;
-                await _uploadService.UploadAsync(files, GetContainerNamePhotos(_emailAddress));
+                await _imagesService.UploadAsync(files, GetContainerNamePhotos(_emailAddress));
                 
                 return RedirectToAction("UploadPhotos");
             }
@@ -100,7 +100,7 @@ namespace FaceAggregator.Controllers
             {
                 Uri uri = new Uri(name);
                 string filename = Path.GetFileName(uri.LocalPath);
-                await _uploadService.DeleteImage(filename, GetContainerNamePhotos(_emailAddress));
+                await _imagesService.DeleteImage(filename, GetContainerNamePhotos(_emailAddress));
                 return RedirectToAction("UploadPhotos");
             }
             catch (Exception ex)
@@ -116,7 +116,7 @@ namespace FaceAggregator.Controllers
         {
             try
             {
-                await _uploadService.DeleteAllImages(GetContainerNamePhotos(_emailAddress));
+                await _imagesService.DeleteAllImages(GetContainerNamePhotos(_emailAddress));
 
                 return RedirectToAction("UploadPhotos");
             }

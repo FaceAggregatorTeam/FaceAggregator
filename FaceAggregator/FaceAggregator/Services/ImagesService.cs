@@ -6,19 +6,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Configuration;
+using FaceAggregator.Utils;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace FaceAggregator.Services
 {
-    public class UploadService : IUploadService
+    public class ImagesService : IImagesService
     {
         private CloudStorageAccount _storageAccount;
         private CloudBlobClient _blobClient;
 
-        public UploadService()
+        public ImagesService(IConfiguration configuration)
         {
-            _storageAccount = CloudStorageAccount.Parse(WebConfigurationManager.AppSettings["StorageConnectionString"]);
+            _storageAccount = CloudStorageAccount.Parse(configuration.GetValue("StorageConnectionString"));
             _blobClient = _storageAccount.CreateCloudBlobClient();
         }
         
