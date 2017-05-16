@@ -28,18 +28,18 @@ namespace FaceAggregator.Controllers
         public async Task<ActionResult> StartRecognition()
         {
             var patternImageUri = _imagesService.GetAllPhotos(_accountService.GetContainerNameFace(ClaimsPrincipal.Current)).Result.FirstOrDefault();
-            var patternImage =await _recognitionService.DetectFaces(patternImageUri.AbsoluteUri);
+            var patternImage = await _recognitionService.DetectFaces(patternImageUri.AbsoluteUri);
             var allImagesUri = await _imagesService.GetAllPhotos(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
             var allImagesAddresses = allImagesUri.Select(e => e.AbsoluteUri);
-            var allDetectedImages =await DetectionForImages(allImagesAddresses);
+            var allDetectedImages = await DetectionForImages(allImagesAddresses);
             var foundImages = await _recognitionService.FindSimilar(patternImage.Faces.FirstOrDefault().FaceId, allDetectedImages);
-            MoveToResultContainer(foundImages);
+            await MoveToResultContainer(foundImages);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
-        private void MoveToResultContainer(IList<Image> foundImages)
+        private async Task MoveToResultContainer(IList<Image> foundImages)
         {
-            _imagesService.UploadAsyncFromUri(foundImages,
+            await _imagesService.UploadAsyncFromUri(foundImages,
                 _accountService.GetContainerNameResults(ClaimsPrincipal.Current));
         }
 
