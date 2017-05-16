@@ -12,9 +12,9 @@ namespace FaceAggregator.Utils
     {
         private readonly string _subscriptionKey;
 
-        public HttpFaceRecognition(string subscriptionKey)
+        public HttpFaceRecognition(IConfiguration configuration)
         {
-            _subscriptionKey = subscriptionKey;
+            _subscriptionKey = configuration.GetValue("SubscriptionKey");
         }
 
         public async Task<Image> DetectFaces(string imagePath)

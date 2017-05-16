@@ -43,7 +43,7 @@ namespace FaceAggregator.Controllers
                 _accountService.GetContainerNameResults(ClaimsPrincipal.Current));
         }
 
-        public async Task<List<Image>> DetectionForImages(IEnumerable<string> images)
+        private async Task<List<Image>> DetectionForImages(IEnumerable<string> images)
         {
             var result = new List<Image>();
             foreach (var filePath in images)

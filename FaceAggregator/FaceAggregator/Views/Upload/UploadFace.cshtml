@@ -20,7 +20,12 @@
     <div class="imageBlock">
         <a href="@Model" target="_blank"><img class="thumb" src="@Model" alt="images" /></a><br />
     </div>
-    
+
+    using (Html.BeginForm("StartRecognition", "Recognition", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="fileUpload btn btn-default"><span>Start recognition</span><input type="submit" name="startRecognition" class="upload" /></div>
+    }
+
 }
 <script>
     function DisplayFilesToUpload() {

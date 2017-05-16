@@ -30,8 +30,9 @@ namespace FaceAggregator.Services
         {
             var lol = claim.Claims.FirstOrDefault(e => e.Type.Contains("emailaddress"));
             if (lol != null)
-               return lol.Value;
+                return lol.Value;
             return "";
         }
-        
+
     }
+}
