@@ -28,10 +28,15 @@ namespace FaceAggregator.Services
         {
             
             CloudBlobContainer blobContainer = _blobClient.GetContainerReference(containerName);
-            await blobContainer.CreateIfNotExistsAsync();
-
-            await blobContainer.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
-
+            bool containerExists = blobContainer.Exists();
+            if (!containerExists)
+            {
+                await blobContainer.CreateAsync();
+                await blobContainer.SetPermissionsAsync(new BlobContainerPermissions
+                {
+                    PublicAccess = BlobContainerPublicAccessType.Blob
+                });
+            }
             List<Uri> allBlobs = new List<Uri>();
             foreach (IListBlobItem blob in blobContainer.ListBlobs())
             {
