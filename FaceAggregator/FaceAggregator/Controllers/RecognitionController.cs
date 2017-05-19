@@ -34,7 +34,7 @@ namespace FaceAggregator.Controllers
             var allDetectedImages = await DetectionForImages(allImagesAddresses);
             var foundImages = await _recognitionService.FindSimilar(patternImage.Faces.FirstOrDefault().FaceId, allDetectedImages);
             await MoveToResultContainer(foundImages);
-            return new HttpStatusCodeResult(HttpStatusCode.OK);
+            return RedirectToAction("Index", "Results");
         }
 
         private async Task MoveToResultContainer(IList<Image> foundImages)
