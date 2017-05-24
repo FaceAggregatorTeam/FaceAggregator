@@ -1,24 +1,23 @@
 ﻿@{
     ViewBag.Title = "Results";
 }
-<div class="jumbotron">
-    <h2>Finding results</h2>
-    <h5>Here you can see photos with given person</h5>
+
+<div class="main">
+    <h3>3. Enjoy your results!</h3>
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <div class="imageBlock">
+                <a href="@item" target="_blank"><img class="thumb" src="@item" alt="images" /></a><br />
+                <div class="deleteDiv"><img class="deleteIcon" src="~/Images/deleteImage.png" title="Delete Image" onclick="deleteImage('@item');" /></div>
+            </div>
+        }
+
+        using (Html.BeginForm("DeleteAll", "Results", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="fileUpload deleteBtn btn btn-default"><span>Delete All Files</span><input type="submit" name="deleteAll" class="upload" /></div>
+        }
+    }
 </div>
-
-@if (Model != null && Model.Count > 0)
-{
-    foreach (var item in Model)
-    {
-        <div class="imageBlock">
-            <a href="@item" target="_blank"><img class="thumb" src="@item" alt="images" /></a><br />
-            <div class="deleteDiv"><img class="deleteIcon" src="~/Images/deleteImage.png" title="Delete Image" onclick="deleteImage('@item');" /></div>
-        </div>
-    }
-
-    using (Html.BeginForm("DeleteAll", "Results", FormMethod.Post, new { enctype = "multipart/form-data" }))
-    {
-        <div class="fileUpload btn btn-default"><span>Delete All Files</span><input type="submit" name="deleteAll" class="upload" /></div>
-    }
-}
 

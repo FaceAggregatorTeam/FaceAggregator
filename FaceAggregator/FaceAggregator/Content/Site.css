@@ -1,7 +1,15 @@
-﻿body { padding-top: 5px; padding-bottom: 5px; }
+﻿body {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-image:url(../Images/background.png);
+    background-size:cover;
+}
 
 /* Set padding to keep content from hitting the edges */
-.body-content { padding-left: 15px; padding-right: 15px; }
+.body-content {
+    padding-right: 15px;
+    color:#b7b7b7;
+}
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
@@ -15,7 +23,20 @@ textarea { max-width: 280px; }
 
 .fileUpload { position: relative; overflow: hidden; margin-bottom: 5px; margin-top:5px; }
 .fileUpload input.upload { position: absolute; top: 0; right: 0; margin: 0; padding: 0; font-size: 20px; cursor: pointer; opacity: 0; filter: alpha(opacity=0); }
-.deleteDiv{ position:relative; top:-160px; left:130px; width:30px;height:30px;}
-.imageBlock{display: inline-block;}
-.thumb{width:159px; height:159px;}
+.deleteDiv{ position:relative; top:-90px; left:130px; width:30px;height:30px;}
+.imageBlock{display: inline-block; height:95px; background-color:white;}
+.thumb{width:159px; height:89px;}
 .deleteIcon{width:30px; height:30px;}
+
+.main {
+    padding-top:15%;
+}
+
+.deleteBtn {
+    font-size:12px;
+}
+
+.startRecBtn {
+    font-size:20px;
+    margin-top:20px;
+}

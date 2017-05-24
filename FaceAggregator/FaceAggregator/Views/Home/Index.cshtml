@@ -4,19 +4,22 @@
 
 @if (!Request.IsAuthenticated)
 {
-    <div class="jumbotron">
-        <h1>FaceAggregator</h1>
-        <p class="lead">What an amazing application. etc.</p>
-        <p><a href=@Url.Action("LoggedInIndex", "Home") class="btn btn-primary btn-lg">Log In &raquo;</a>
-        </p>
+    <div class="main">
+        <h3>Have you been looking for easy tool to segregate your photos?</h3>
+        <h3><b>You have found it!</b></h3>
+        <h3>Log in with your Google account:</h3>
+        <a href=@Url.Action("LoggedInIndex", "Home") class="btn btn-primary btn-lg">Log In &raquo;</a>
     </div>
 }
 else
 {
-    <div class="jumbotron">
-        <h1>FaceAggregator</h1>
-        <p class="lead">What you have to do to make everything work</p>
-
+    <div class="main">
+        <h3><b>Here is what you have to do now:</b></h3>
+        <ol>
+            <li>Upload photos you want to segregate</li>
+            <li>Upload photo of a person you would like to find</li>
+            <li><b>Check out your results!</b></li>
+        </ol>
     </div>
 }
 
