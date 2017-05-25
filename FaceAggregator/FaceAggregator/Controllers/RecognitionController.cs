@@ -29,6 +29,8 @@ namespace FaceAggregator.Controllers
         {
             try
             {
+                string containerName = _accountService.GetContainerNameResults(ClaimsPrincipal.Current);
+                await _imagesService.DeleteAllImages(containerName);
                 var patternImageUri = _imagesService.GetAllPhotos(_accountService.GetContainerNameFace(ClaimsPrincipal.Current)).Result.FirstOrDefault();
                 var patternImage = await _recognitionService.DetectFaces(patternImageUri.AbsoluteUri);
                 var allImagesUri = await _imagesService.GetAllPhotos(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
