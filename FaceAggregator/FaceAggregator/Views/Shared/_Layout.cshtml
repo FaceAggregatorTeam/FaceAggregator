@@ -8,6 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
+    <div id="loader"></div>
+    <div id="loading_bg"></div>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -31,6 +33,9 @@
             </div>
         </div>
     </div>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
     <div class="container-fluid body-content">    
         @RenderBody()
         <hr />
@@ -38,9 +43,10 @@
             <p>&copy; @DateTime.Now.Year - FaceAggregator</p>
         </footer>
     </div>
-
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <script>
+        var loader = document.getElementById("loader");
+        loader.style.visibility = "hidden";
+    </script>
+  
 </body>
 </html>

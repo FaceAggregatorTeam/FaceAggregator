@@ -19,7 +19,7 @@
 
         using (Html.BeginForm("StartRecognition", "Recognition", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
-            <div class="fileUpload startRecBtn btn btn-primary"><span>Start recognition!</span><input type="submit" name="startRecognition" class="upload" /></div>
+            <div id="startRecognitionBtn" class="fileUpload startRecBtn btn btn-primary"><span>Start recognition!</span><input type="submit" name="startRecognition" class="upload" /></div>
         }
 
     }
@@ -41,4 +41,9 @@
         document.getElementById("FileToUpload").innerHTML = html;
     }
 
+    $("#startRecognitionBtn").click(function () {
+        document.getElementById("loader").style.visibility = "visible";
+        document.getElementById("loading_bg").style.visibility = "visible";
+        this.disabled = true;
+    });
 </script>
