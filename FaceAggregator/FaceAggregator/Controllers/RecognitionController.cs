@@ -27,14 +27,22 @@ namespace FaceAggregator.Controllers
         [HttpPost]
         public async Task<ActionResult> StartRecognition()
         {
-            var patternImageUri = _imagesService.GetAllPhotos(_accountService.GetContainerNameFace(ClaimsPrincipal.Current)).Result.FirstOrDefault();
-            var patternImage = await _recognitionService.DetectFaces(patternImageUri.AbsoluteUri);
-            var allImagesUri = await _imagesService.GetAllPhotos(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
-            var allImagesAddresses = allImagesUri.Select(e => e.AbsoluteUri);
-            var allDetectedImages = await DetectionForImages(allImagesAddresses);
-            var foundImages = await _recognitionService.FindSimilar(patternImage.Faces.FirstOrDefault().FaceId, allDetectedImages);
-            await MoveToResultContainer(foundImages);
-            return RedirectToAction("Index", "Results");
+            try
+            {
+                var patternImageUri = _imagesService.GetAllPhotos(_accountService.GetContainerNameFace(ClaimsPrincipal.Current)).Result.FirstOrDefault();
+                var patternImage = await _recognitionService.DetectFaces(patternImageUri.AbsoluteUri);
+                var allImagesUri = await _imagesService.GetAllPhotos(_accountService.GetContainerNamePhotos(ClaimsPrincipal.Current));
+                var allImagesAddresses = allImagesUri.Select(e => e.AbsoluteUri);
+                var allDetectedImages = await DetectionForImages(allImagesAddresses);
+                var foundImages = await _recognitionService.FindSimilar(patternImage.Faces.FirstOrDefault().FaceId, allDetectedImages);
+                await MoveToResultContainer(foundImages);
+                return RedirectToAction("Index", "Results");
+            }
+            catch (Exception e)
+            {
+                return View("Error");
+            }
+
         }
 
         private async Task MoveToResultContainer(IList<Image> foundImages)
