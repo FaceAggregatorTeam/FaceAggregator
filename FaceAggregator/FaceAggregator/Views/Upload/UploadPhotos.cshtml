@@ -4,6 +4,12 @@
 
 <div class="main">
     <h3>1. Select photos you want to segregate</h3>
+    <h4 style="color: tomato">Restrictions:</h4>
+    <ol>
+        <li>The image file size should be larger than or equal to 1KB but no larger than 4MB.</li>
+        <li>The detectable face size is between 36x36 to 4096x4096 pixels. The faces out of this range will not be detected."</li>
+        <li>JPEG, PNG, GIF(the first frame), and BMP are supported.</li>
+    </ol>
     @using (Html.BeginForm("UploadAsyncPhotos", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="fileUpload btn btn-success">
