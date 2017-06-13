@@ -8,14 +8,31 @@ using Newtonsoft.Json;
 
 namespace FaceAggregator.Utils
 {
+    /// <summary>
+    /// Class implementing IFaceSimilarity interface
+    /// </summary>
+    /// <seealso cref="FaceAggregator.Utils.IFaceSimilarity" />
     public class FaceSimilarity : IFaceSimilarity
     {
+        /// <summary>
+        /// The subscription key
+        /// </summary>
         private readonly string _subscriptionKey;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FaceSimilarity"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public FaceSimilarity(IConfiguration configuration)
         {
             _subscriptionKey = configuration.GetValue("SubscriptionKey");
         }
+        /// <summary>
+        /// Finds the similar face.
+        /// </summary>
+        /// <param name="facePatternId">The face pattern identifier.</param>
+        /// <param name="images">The images.</param>
+        /// <returns></returns>
         public async Task<IList<Image>> FindSimilar(string facePatternId, IList<Image> images)
         {
             var client = new HttpClient();
@@ -40,6 +57,12 @@ namespace FaceAggregator.Utils
             return SelectRecognizedImages(images, recognizedFaces);
         }
 
+        /// <summary>
+        /// Selects the recognized images.
+        /// </summary>
+        /// <param name="imagesCollection">The images collection.</param>
+        /// <param name="recognizedFacesIds">The recognized faces ids.</param>
+        /// <returns></returns>
         private IList<Image> SelectRecognizedImages(IList<Image> imagesCollection, IList<string> recognizedFacesIds)
         {
             var imagesSource = imagesCollection.ToList();

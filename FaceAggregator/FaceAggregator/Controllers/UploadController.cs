@@ -13,17 +13,36 @@ using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace FaceAggregator.Controllers
 {
+    /// <summary>
+    /// Controller managing image upload process
+    /// </summary>
+    /// <seealso cref="System.Web.Mvc.Controller" />
     [Authorize]
     public class UploadController : Controller
     {
+        /// <summary>
+        /// The images service
+        /// </summary>
         private readonly IImagesService _imagesService;
+        /// <summary>
+        /// The account service
+        /// </summary>
         private readonly IAccountService _accountService;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UploadController"/> class.
+        /// </summary>
+        /// <param name="imagesService">The images service.</param>
+        /// <param name="accountService">The account service.</param>
         public UploadController(IImagesService imagesService, IAccountService accountService)
         {
             _imagesService = imagesService;
             _accountService = accountService;
         }
 
+        /// <summary>
+        /// Uploads the photos.
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> UploadPhotos()
         {
             try
@@ -39,6 +58,10 @@ namespace FaceAggregator.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads the face.
+        /// </summary>
+        /// <returns></returns>
         public async Task<ActionResult> UploadFace()
         {
             try
@@ -54,6 +77,10 @@ namespace FaceAggregator.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads the face asynchronously.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> UploadAsyncFace()
         {
@@ -74,6 +101,10 @@ namespace FaceAggregator.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads the photos asynchronously.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> UploadAsyncPhotos()
         {
@@ -92,6 +123,11 @@ namespace FaceAggregator.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the image.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> DeleteImage(string name)
         {
@@ -109,7 +145,11 @@ namespace FaceAggregator.Controllers
                 return View("Error");
             }
         }
-        
+
+        /// <summary>
+        /// Deletes all images.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult> DeleteAll()
         {
